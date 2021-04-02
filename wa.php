@@ -3,8 +3,9 @@ $t = time();
 $dom = $_SERVER['HTTP_HOST'];
 $dom = idn_to_utf8($dom);
 echo '当前你访问哒地址:'. 'https://'.$dom.$_SERVER['PHP_SELF'];//'?'.$_SERVER['QUERY_STRING'];
-echo ("<br>页面访问时间:" . date("Y-m-d G:H:s", $t) . "<br>");
-echo ("Count_down ver 1.1 by dayi.<br>乌拉~<br>如果您有建议欢迎提出来嘻嘻嘻谢谢~<br>");
+echo ("<br>页面访问时间:" . date("Y-m-d G:i:s", $t) . "");
+echo ("<br>Count_down ver 1.12 by dayi.<br>");
+//echo "如果您有建议欢迎提出来嘻嘻嘻谢谢~<br>";
 ?>
 <html>
 
@@ -63,9 +64,9 @@ echo ("Count_down ver 1.1 by dayi.<br>乌拉~<br>如果您有建议欢迎提出�
             .container {
                 width: 75%;
                 float: right;
-                margin: 2% -12% auto;
+                margin: 2% -13% auto;
                 background-color: #f0f0f035;
-                padding: 6% 5%;
+                padding: 0% 5%;
                 border-radius: 1em
             }
 
@@ -78,7 +79,7 @@ echo ("Count_down ver 1.1 by dayi.<br>乌拉~<br>如果您有建议欢迎提出�
             }
 
             ul li {
-                font-size: 5em;
+                font-size: 4.5em;
                 line-height: 1.4
             }
 
@@ -135,19 +136,29 @@ echo ("Count_down ver 1.1 by dayi.<br>乌拉~<br>如果您有建议欢迎提出�
 
         function get_left_time(t_end_time) {
             curr_time = parseInt(Date.parse(new Date()) / 1000);
+            curr_time_ms = new Date().getTime();
+            curr_time_ms=curr_time_ms/1000;
             var t_left_time = parseInt(t_end_time - curr_time);
+            var t_left_time_ms=t_end_time - curr_time_ms;
             var c_int_day = (t_left_time) / (60 * 60 * 24);
-            c_int_day = parseInt(c_int_day);
+                c_int_day = parseInt(c_int_day);
             var c_int_hour = parseInt((t_left_time - c_int_day * 60 * 60 * 24) / (60 * 60));
             var c_int_min = parseInt((t_left_time - c_int_day * 60 * 60 * 24 - c_int_hour * 60 * 60) / (60));
             var c_int_sec = parseInt((t_left_time - c_int_day * 60 * 60 * 24 - c_int_hour * 60 * 60 - c_int_min * 60));
-            msg = c_int_day + "天" + c_int_hour + "时" + c_int_min + "分" + c_int_sec + "秒";
+            //var c_int_msec= ((curr_time_ms-t_end_time)/(60*60*24)-Math.abs((curr_time_ms-t_end_time)/(60*60*24*1000)))*24*60*60;
+            
+            var c_flo_sec = (t_left_time_ms - c_int_day * 60 * 60 * 24 - c_int_hour * 60 * 60 - c_int_min * 60);
+                c_flo_sec = ((((c_flo_sec- (c_int_sec-1))*10))%10).toFixed(0);
+            
+            
+            
+            msg = c_int_day + "天" + c_int_hour + "时" + c_int_min + "分" + c_int_sec + "秒";//c_flo_sec;
             return msg;
         }
-
+        var end_time = 1623027600;
+        var curr_time = parseInt(Date.parse(new Date()) / 1000);
         function count_down() {
-            var end_time = 1623027600;
-            var curr_time = parseInt(Date.parse(new Date()) / 1000);
+            
             let curr_time2 = new Date().getTime();
             curr_time2 = curr_time2 / 1000;
             var left_time = parseInt(end_time - curr_time);
@@ -173,7 +184,15 @@ echo ("Count_down ver 1.1 by dayi.<br>乌拉~<br>如果您有建议欢迎提出�
             msg1 = msg1 + "";
             strnowtime = myDate.getMonth() + 1 + "-" + myDate.getDate() + " " + myDate.getHours() + ":" + myDate.getMinutes();
             //myDate.toLocaleString();
-            sub_time = "二模(4.25):" + get_left_time(1619280000) + "<br>科: " + sub_time + "<br>" + "周: " + week_time + "";
+            
+            var next_five_day=parseInt( c_int_day/5)*5;
+            var five_day_left =c_int_day-next_five_day;
+            var msg11 = next_five_day+"天: " + five_day_left + "天" + c_int_hour + "时" + c_int_min + "分" + c_int_sec + "秒";
+            
+            str_next_five_day = msg11+"<br>";
+            
+            sub_time =  str_next_five_day+
+                        "二模(4.25):" + get_left_time(1619280000) + "<br>科: " + sub_time + "<br>" + "周: " + week_time + "";
             //<br>"+strnowtime;
             sub_time = sub_time;
 
